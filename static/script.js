@@ -842,6 +842,26 @@ document.addEventListener('DOMContentLoaded', () => {
     initQuotes();
     updateDirectionUI();
     checkAuth();
-    if(loginNavBtn && authModal) loginNavBtn.addEventListener('click', () => authModal.classList.remove('hidden'));
-    if(closeAuthBtn || closeModalBtn) closeAuthBtn.addEventListener('click', () => authModal.classList.add('hidden'));
+
+    // Absolute Bulletproof Modal Fallbacks
+    const sm_loginBtn = document.getElementById('login-nav-btn');
+    const sm_authModal = document.getElementById('auth-modal');
+    const sm_closeBtn = document.getElementById('close-auth-btn');
+    
+    if (sm_loginBtn && sm_authModal) {
+        sm_loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sm_authModal.classList.remove('hidden');
+            sm_authModal.style.display = 'flex';
+            sm_authModal.style.opacity = '1';
+            sm_authModal.style.pointerEvents = 'auto';
+        });
+    }
+    if (sm_closeBtn && sm_authModal) {
+        sm_closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sm_authModal.classList.add('hidden');
+            sm_authModal.style.display = 'none';
+        });
+    }
 });
