@@ -842,4 +842,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initQuotes();
     updateDirectionUI();
     checkAuth();
+    if(loginNavBtn && authModal) loginNavBtn.addEventListener('click', () => authModal.classList.remove('hidden'));
+    if(closeAuthBtn || closeModalBtn) closeAuthBtn.addEventListener('click', () => authModal.classList.add('hidden'));
 });
