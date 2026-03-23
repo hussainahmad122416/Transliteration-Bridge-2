@@ -292,26 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
         authToggleLink.textContent = isLoginMode ? 'Sign Up' : 'Login';
     });
 
-    document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
-        e.preventDefault();
-        const email = authEmail.value;
-        if (!email) {
-            showToast('Enter your email first to reset password', true);
-            return;
-        }
-        showToast('Sending reset link...');
-        try {
-            await fetch('/api/auth/reset-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
-            });
-            showToast('Password reset instructions sent!');
-        } catch (err) {
-            showToast('Failed to send reset email.', true);
-        }
-    });
-
     document.getElementById('google-login-btn').addEventListener('click', async (e) => {
         e.preventDefault();
         showToast('Connecting to Google OAuth...');
@@ -778,9 +758,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     downloadDocxBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        // In a prod app, we'd fire an API call to get a docx Blob. For MVP, we provide txt.
-        showToast('Docx download requires backend. Attempting basic download...');
-        generateFileBlob(resultBox.textContent, 'txt');
+        const text = resultBox.textContent;
+        if (!text) return showToast('No text to download', true);
+        
+        try {
+            showToast('Generating Word Document...');
+            const res = await fetch('/api/export-docx', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: text, direction: currentDirection})
+            });
+            if (!res.ok) throw new Error('Export failed');
+            
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transliteration_${currentDirection}.docx`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Download complete');
+        } catch (err) {
+            showToast('Failed to download document', true);
+        }
     });
     // Theme Logic
     const getPreferredTheme = () => {

@@ -221,5 +221,26 @@ async def text_to_speech(request: Request, payload: TTSRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/export-docx")
+@limiter.limit("15/minute")
+async def export_docx(request: Request, payload: TextRequest):
+    try:
+        if not payload.text.strip():
+            raise HTTPException(status_code=400, detail="Empty text")
+        
+        doc = Document()
+        doc.add_paragraph(payload.text)
+        
+        fp = io.BytesIO()
+        doc.save(fp)
+        fp.seek(0)
+        
+        headers = {
+            'Content-Disposition': f'attachment; filename="transliteration_{payload.direction}.docx"'
+        }
+        return StreamingResponse(fp, media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document", headers=headers)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
