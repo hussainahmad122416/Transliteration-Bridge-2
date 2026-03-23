@@ -48,6 +48,9 @@ from gtts import gTTS
 app.include_router(auth_router)
 app.include_router(history_router)
 
+# Initialize Database Tables
+Base.metadata.create_all(bind=engine)
+
 # Initialize Pipeline Modules
 preprocessor = PreprocessingAgent()
 translator = TransliterationEngine()

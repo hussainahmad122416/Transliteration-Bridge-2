@@ -292,17 +292,45 @@ document.addEventListener('DOMContentLoaded', () => {
         authToggleLink.textContent = isLoginMode ? 'Sign Up' : 'Login';
     });
 
+    document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = authEmail.value;
+        if (!email) {
+            showToast('Enter your email first to reset password', true);
+            return;
+        }
+        showToast('Processing...');
+        try {
+            const res = await fetch('/api/auth/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            showToast(data.msg, !res.ok);
+            if (data.msg && data.msg.includes('reset to:')) {
+                authPassword.value = data.msg.split(': ')[1];
+            }
+        } catch (err) {
+            showToast('Failed to connect to reset server.', true);
+        }
+    });
+
     document.getElementById('google-login-btn').addEventListener('click', async (e) => {
         e.preventDefault();
-        showToast('Connecting to Google OAuth...');
+        showToast('Initializing Google Sign-In...');
         try {
             const res = await fetch('/api/auth/google-login');
             const data = await res.json();
-            if (res.ok && data.msg) {
+            if (res.ok && data.access_token) {
+                localStorage.setItem('translit_token', data.access_token);
                 showToast(data.msg);
+                checkAuth();
+            } else {
+                throw new Error(data.detail || 'Google login failed');
             }
         } catch (err) {
-            showToast('Google login feature is temporarily offline.', true);
+            showToast('Google login error.', true);
         }
     });
 

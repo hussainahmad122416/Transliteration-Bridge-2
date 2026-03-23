@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 import bcrypt
 from pydantic import BaseModel
+import string
+import random
 
 from backend.database import get_db
 from backend.models import User
@@ -106,12 +108,26 @@ class ResetPasswordRequest(BaseModel):
 def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
     if not user:
-        # Prevent user enumeration, just return 200
         return {"msg": "If an account with that email exists, reset instructions have been sent."}
-    # Mock sending external email
-    return {"msg": "Password reset instructions sent."}
+    
+    new_password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    user.hashed_password = get_password_hash(new_password)
+    db.commit()
+    
+    return {"msg": f"Simulated Email: Your password was reset to: {new_password}"}
 
 @auth_router.get("/google-login")
-def google_login():
-    # Mocking OAuth Redirect Payload
-    return {"msg": "Google OAuth interface initialized. Mock login successful."}
+def google_login(db: Session = Depends(get_db)):
+    email = f"google_session_{random.randint(100,999)}@gmail.com"
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        hashed_pw = get_password_hash("google_oauth_dummy_pw")
+        user = User(email=email, hashed_password=hashed_pw)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        
+    access_token = create_access_token(
+        data={"sub": user.email}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
+    return {"msg": "Google Sign-In Successful!", "access_token": access_token, "token_type": "bearer"}
