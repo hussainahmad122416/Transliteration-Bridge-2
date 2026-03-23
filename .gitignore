@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+.venv
+transliteration_bridge.db
+*.log
+.vscode/
+.DS_Store

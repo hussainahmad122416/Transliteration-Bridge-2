@@ -1,0 +1,16 @@
+{
+  "input_text": "ਸੋਹਣਾ",
+  "output_text": "سوہنا",
+  "direction": "gurmukhi_to_shahmukhi",
+  "word_count": 1,
+  "char_count": 5,
+  "process_time_ms": 0,
+  "is_source_script_correct": true,
+  "rich_mapping": [
+    {
+      "is_word": true,
+      "input": "ਸੋਹਣਾ",
+      "output": "سوہنا"
+    }
+  ]
+}

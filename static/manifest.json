@@ -1,0 +1,17 @@
+{
+  "name": "Transliteration Bridge",
+  "short_name": "Translit Bridge",
+  "description": "A professional SaaS application for bidirectional transliteration between Shahmukhi and Gurmukhi Punjabi.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a192f",
+  "theme_color": "#2196F3",
+  "icons": [
+    {
+      "src": "/static/images/logo_icon_only.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

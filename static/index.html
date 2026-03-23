@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transliteration Bridge | Shahmukhi to Gurmukhi</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="top-nav glass-nav">
+            <div class="nav-brand">
+                <img src="/static/images/logo_icon.png" alt="TB Logo" class="bridge-logo-img">
+                <div class="brand-text-block">
+                    <span class="brand-title">Transliteration Bridge</span>
+                    <span class="brand-slogan">Connecting Scripts, Preserving Language</span>
+                </div>
+            </div>
+            <div class="nav-links" id="main-nav">
+                <a href="#hero-section" class="active">Home</a>
+                <a href="#workspace-section">Tool</a>
+                <a href="#history-section" id="nav-history" class="hidden">History</a>
+            </div>
+            <div class="nav-auth" id="auth-nav">
+                <button id="theme-btn" class="icon-btn" title="Toggle Theme"><i class="fa-solid fa-moon"></i></button>
+                <button id="login-nav-btn" class="primary-btn outline small-btn">Sign In</button>
+                <div class="user-menu hidden" id="user-menu">
+                    <span id="user-email-display">user</span>
+                    <button id="logout-btn" class="text-btn"><i class="fa-solid fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero-section">
+            <div class="hero-content fade-in-up">
+                <span class="badge">v2.0 Beta Live</span>
+                <h1 class="hero-title">Bridging <span>Punjabi</span> Scripts Seamlessly</h1>
+                <p class="hero-subtitle">The most accurate bidirectional NLP transliteration engine for Shahmukhi and Gurmukhi. No meaning lost, just pure script translation.</p>
+                
+                <div class="animated-quote-section fade-in-up" style="animation-delay: 0.2s;">
+                    <div id="dynamic-quote-container" class="quote-glass">
+                        <i class="fa-solid fa-quote-left quote-icon"></i>
+                        <p id="dynamic-quote-text" class="quote-text">"Preserving our heritage, one script at a time."</p>
+                        <p id="dynamic-quote-author" class="quote-author">- Transliteration Bridge</p>
+                    </div>
+                </div>
+                
+                <div class="hero-actions" style="margin-top: 2rem;">
+                    <a href="#workspace-section" class="primary-btn large-btn shadow-glow">Start Translating <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Workspace -->
+        <section class="workspace-section fade-in-up" id="workspace-section">
+            <div class="workspace-grid">
+                <!-- Left Panel: Input -->
+                <div class="panel input-panel">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-keyboard text-primary"></i> <span id="input-lang-label">Shahmukhi</span></h2>
+                        <div class="output-actions">
+                            <div class="tts-controls" id="tts-input-controls">
+                                <button id="play-input-btn" class="icon-btn" title="Play"><i class="fa-solid fa-play"></i></button>
+                                <button id="pause-input-btn" class="icon-btn hidden" title="Pause"><i class="fa-solid fa-pause"></i></button>
+                                <button id="stop-input-btn" class="icon-btn hidden" title="Stop"><i class="fa-solid fa-stop"></i></button>
+                            </div>
+                            <button id="clear-btn" class="icon-btn" title="Clear text"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="input-area">
+                        <textarea id="source-input" placeholder="Type or paste your text here..." spellcheck="false" dir="rtl"></textarea>
+                    </div>
+
+                    <div class="upload-area" id="drop-zone">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p>Drag & Drop .docx or .txt file</p>
+                        <input type="file" id="file-upload" accept=".txt,.docx" hidden>
+                        <button class="text-btn primary-text" onclick="document.getElementById('file-upload').click()">Browse Files</button>
+                        <div id="file-name-display" class="file-name-display"></div>
+                    </div>
+                </div>
+
+                <!-- Center Controls -->
+                <div class="action-controls direction-controls">
+                    <button id="swap-dir-btn" class="icon-btn swap-btn shadow-btn" title="Swap Direction">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    </button>
+                    <div class="direction-indicator" id="direction-indicator-text">S → G</div>
+                    <button id="transliterate-btn" class="primary-btn glow-btn mt-1">
+                        <i class="fa-solid fa-bolt"></i> <span class="hide-mobile">Convert</span>
+                    </button>
+                </div>
+
+                <!-- Right Panel: Output -->
+                <div class="panel result-panel">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-book-open text-primary"></i> <span id="output-lang-label">Gurmukhi</span></h2>
+                        <div class="output-actions">
+                            <div class="tts-controls" id="tts-output-controls">
+                                <button id="play-output-btn" class="icon-btn" title="Play"><i class="fa-solid fa-play"></i></button>
+                                <button id="pause-output-btn" class="icon-btn hidden" title="Pause"><i class="fa-solid fa-pause"></i></button>
+                                <button id="stop-output-btn" class="icon-btn hidden" title="Stop"><i class="fa-solid fa-stop"></i></button>
+                            </div>
+                            <button id="copy-btn" class="icon-btn" title="Copy to Clipboard">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                            <div class="dropdown">
+                                <button id="download-btn" class="icon-btn" title="Download File">
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                                <div class="dropdown-content">
+                                    <a href="#" id="download-txt"><i class="fa-solid fa-file-lines"></i> .txt</a>
+                                    <a href="#" id="download-docx"><i class="fa-solid fa-file-word"></i> .docx</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output-area">
+                        <div id="gurmukhi-output" class="result-box" dir="ltr" placeholder="Translation will magically appear here..."></div>
+                        <!-- Loading overlay -->
+                        <div id="loading-overlay" class="overlay hidden">
+                            <div class="spinner"></div>
+                            <p>Processing text...</p>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="stats-bar">
+                        <div class="stat-item"><span class="stat-value" id="word-count">0</span><span class="stat-label">Words</span></div>
+                        <div class="stat-item"><span class="stat-value" id="char-count">0</span><span class="stat-label">Characters</span></div>
+                        <div class="stat-item"><span class="stat-value" id="process-time">0ms</span><span class="stat-label">Speed</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Dashboard Section -->
+        <section class="history-section hidden fade-in-up" id="history-section">
+            <div class="dashboard-header">
+                <h2><i class="fa-solid fa-clock-rotate-left"></i> Your Translations</h2>
+                <button id="refresh-history-btn" class="icon-btn" title="Refresh"><i class="fa-solid fa-rotate-right"></i></button>
+            </div>
+            
+            <div class="history-controls glass-panel" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem; flex-wrap: wrap;">
+                <div class="input-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="history-search" placeholder="Search saved phrases..." class="form-input" style="padding: 0.5rem 0.5rem 0.5rem 2.5rem; font-size: 0.9rem;">
+                </div>
+                <select id="history-filter" class="form-input" style="width: auto; padding: 0.5rem 1rem; font-size: 0.9rem; background-color: var(--panel-bg);">
+                    <option value="all">All Languages</option>
+                    <option value="shahmukhi_to_gurmukhi">Shahmukhi → Gurmukhi</option>
+                    <option value="gurmukhi_to_shahmukhi">Gurmukhi → Shahmukhi</option>
+                </select>
+                <select id="history-sort" class="form-input" style="width: auto; padding: 0.5rem 1rem; font-size: 0.9rem; background-color: var(--panel-bg);">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+            </div>
+            
+            <div class="history-list" id="history-list-container">
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <i class="fa-regular fa-folder-open empty-icon"></i>
+                    <h3>No history found</h3>
+                    <p>Start transliterating above and your securely saved history will appear here.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Transliteration Bridge v2 &copy; 2026</p>
+            <p class="credits">AI-Powered Bidirectional NLP Platform.</p>
+        </footer>
+    </div>
+
+    <!-- Auth Modal Overlay -->
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel bounce-in">
+            <button class="close-modal-btn" id="close-auth-btn"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="modal-header">
+                <i class="fa-solid fa-user-circle text-primary" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h2 id="auth-title">Welcome Back</h2>
+                <p class="text-secondary" id="auth-subtitle">Login to save your translations history safely</p>
+            </div>
+            
+            <form id="auth-form" class="auth-box">
+                <div class="input-group">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input type="email" id="auth-email" placeholder="Email Address" required class="form-input">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="auth-password" placeholder="Password" required class="form-input">
+                </div>
+                
+                <div style="text-align: right; margin-bottom: 1rem; margin-top: -0.5rem;">
+                    <a href="#" id="forgot-password-link" style="color: var(--primary-color); font-size: 0.875rem;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="primary-btn w-100 glow-btn center-text" id="auth-submit-btn">
+                    <span>Sign In</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <button type="button" class="outline-btn w-100 center-text" id="google-login-btn">
+                    <i class="fa-brands fa-google text-primary" style="margin-right: 8px;"></i> Continue with Google
+                </button>
+                
+                <p class="auth-switch-text mt-2 center">
+                    <span id="auth-toggle-msg">Don't have an account?</span>
+                    <a href="#" id="auth-toggle-link">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Profile Modal Overlay -->
+    <div id="profile-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel bounce-in" style="max-width: 400px; text-align: center;">
+            <button class="close-modal-btn" id="close-profile-btn"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="modal-header">
+                <i class="fa-solid fa-circle-user text-primary" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                <h2>Your Profile</h2>
+                <p class="text-secondary" id="profile-email-display">user@example.com</p>
+            </div>
+            
+            <div style="margin: 2rem 0; text-align: left; padding: 1.5rem; background: rgba(0,0,0,0.05); border-radius: 12px;">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-color);">Activity Tracking</h3>
+                <p class="text-secondary"><i class="fa-solid fa-chart-line"></i> Translations Saved: <strong id="profile-history-count" class="text-primary">0</strong></p>
+                <p class="text-secondary" style="margin-top: 0.5rem;"><i class="fa-solid fa-language"></i> Characters Processed: <strong id="profile-char-count" class="text-primary">0</strong></p>
+                <p class="text-secondary" style="margin-top: 0.5rem;"><i class="fa-solid fa-medal"></i> Member Status: <strong>Beta Tester</strong></p>
+            </div>
+            
+            <button type="button" class="outline-btn w-100 center-text" id="modal-logout-btn" style="border-color: var(--danger-color); color: var(--danger-color);">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+            </button>
+        </div>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div id="preview-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel bounce-in" style="max-width: 600px; width: 90%;">
+            <button class="close-modal-btn" id="close-preview-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header" style="text-align: left;">
+                <h2 id="preview-title" style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-file-lines text-primary"></i> Document Preview</h2>
+                <p class="text-secondary">Please confirm or edit the extracted text before translating:</p>
+            </div>
+            
+            <textarea id="preview-textarea" class="form-input" style="width: 100%; height: 250px; margin-bottom: 1rem; border-radius: 8px; resize: vertical;" spellcheck="false"></textarea>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <button type="button" class="outline-btn" id="cancel-preview-btn">Cancel</button>
+                <button type="button" class="primary-btn glow-btn" id="insert-preview-btn">Insert Text <i class="fa-solid fa-check"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Message here</div>
+
+    <!-- jsPDF for PDF Exports -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
